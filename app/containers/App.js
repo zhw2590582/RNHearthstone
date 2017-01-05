@@ -5,7 +5,11 @@ import { connect } from 'react-redux'
 import * as actionCreators from '../actions/'
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Icon, Badge, Spinner, Drawer} from 'native-base'
 
-import SideBar from '../components/sidebar';
+//为方便修改下拉控件样式，直接把包引到源目录 @1.1.0
+//假如不使用下拉控件，直接用 Content 组件替换
+import PullRefreshScrollView from '../assets/react-native-pullRefreshScrollView/'
+
+import SideBar from '../components/Sidebar';
 
 import Home from '../pages/Home'
 import page2 from '../pages/page2'
@@ -58,6 +62,13 @@ class App extends Component {
     this.props.cardsSearch('info', {
 
     }, 'Mountain')
+  }
+
+  _onRefresh() {
+    var self = this;
+    setTimeout(function() {
+      self.refs.PullRefresh.onRefreshEnd();
+    }, 2000);
   }
 
   //页面跳转
@@ -126,10 +137,12 @@ class App extends Component {
                     </Button>
                 </Header>
 
-                <Content>
-                  <CurrentComponent common={this.props.common} cards={this.props.cards} />
+                <View style={styles.container}>
+                  <PullRefreshScrollView style={styles.pullRefresh} ref="PullRefresh" onRefresh={() => this._onRefresh()}>
+                    <CurrentComponent common={this.props.common} cards={this.props.cards} />
+                  </PullRefreshScrollView>
                   { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
-                </Content>
+                </View>
 
                 <Footer >
                     <FooterTab>
