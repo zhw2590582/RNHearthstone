@@ -1,0 +1,37 @@
+{
+	"name": "RNHearthstone",
+	"version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "es6-promise": "^4.0.5",
+    "isomorphic-fetch": "^2.2.1",
+    "leancloud-storage": "^1.5.3",
+    "lodash": "^4.17.0",
+    "native-base": "^0.5.20",
+    "react": "15.4.1",
+    "react-native": "0.39.2",
+    "react-native-pullrefresh-scrollview": "^1.1.0",
+    "react-native-router-flux": "^3.37.0",
+    "react-redux": "^4.4.6",
+    "redux": "^3.6.0",
+    "redux-persist": "^3.0.0",
+    "redux-saga": "^0.14.1",
+    "reselect": "^2.5.4"
+  },
+  "devDependencies": {
+    "babel-jest": "18.0.0",
+    "babel-preset-react-native": "1.9.1",
+    "jest": "18.1.0",
+    "jest-react-native": "17.0.1",
+    "react-test-renderer": "15.4.1",
+    "reactotron-react-native": "^1.3.0",
+    "redux-logger": "^2.7.4"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
