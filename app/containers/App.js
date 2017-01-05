@@ -3,13 +3,11 @@ import { StyleSheet, Image, Text ,Dimensions, View} from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actionCreators from '../actions/'
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Icon, Badge, Spinner} from 'native-base'
+import { Container, Header, Title, Content, Footer, FooterTab, Button, Icon, Badge, Spinner, Drawer} from 'native-base'
 
-//为方便修改下拉控件样式，直接把包引到源目录 @1.1.0
-//假如不使用下拉控件，直接用 Content 组件替换
-//import PullRefreshScrollView from '../assets/react-native-pullRefreshScrollView/'
+import SideBar from '../components/sidebar';
 
-import home from '../pages/home'
+import Home from '../pages/Home'
 import page2 from '../pages/page2'
 import page3 from '../pages/page3'
 import page4 from '../pages/page4'
@@ -35,12 +33,14 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      title: 'home',
+      title: 'Home',
+      num: 0,
       sideBar: false,
-      CurrentComponent: home
+      CurrentComponent: Home
     };
     this._changeComponent = this._changeComponent.bind(this);
-    this._changeSideBar = this._changeSideBar.bind(this);
+    this.openDrawer = this.openDrawer.bind(this);
+    this.closeDrawer = this.closeDrawer.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +48,11 @@ class App extends Component {
     this.props.init(true);
 
     console.log(this.props);
+
+    var self = this;
+    setInterval(function() {
+      self.setState({ num: self.state.num + 1 })
+    }, 1000);
 
     //第一参数为类型(字符串)，第二参数为选项(对象)，第三参数为过滤器(字符串)
     this.props.cardsSearch('info', {
@@ -63,75 +68,97 @@ class App extends Component {
   }
 
   //侧边栏
-  _changeSideBar() {
-    this.setState({sideBar: !this.state.sideBar})
+  openDrawer() {
+    this._drawer.open();
+    this.setState({sideBar: true})
   }
 
-  onRefresh() {
-    console.log('refresh');
-    var self = this;
-    setTimeout(function() {
-      self.refs.PullRefresh.onRefreshEnd();
-    }, 2000);
+  closeDrawer() {
+    if (this.state.sideBar) {
+      this.setState({sideBar: false})
+      this._drawer.close()
+    }
   }
 
   render() {
     const { CurrentComponent, title} = this.state;
     const { common, cards } = this.props;
-
+    console.log(common.loading);
     return (
-      <Image source={require('../assets/images/test.png')} style={styles.backgroundImage}>
-        <Container>
-            <Header>
-                <Button transparent onPress={this._changeSideBar}>
-                    <Icon name='ios-menu' />
-                </Button>
-                <Title>{ title }</Title>
-                <Button transparent>
-                    <Icon name='ios-menu' />
-                </Button>
-            </Header>
+        <Drawer
+          ref={(ref) => { this._drawer = ref; }}
+          type="overlay"
+          tweenDuration={150}
+          content={<SideBar />}
+          tapToClose
+          acceptPan={false}
+          onClose={() => this.closeDrawer()}
+          openDrawerOffset={0.2}
+          panCloseMask={0.2}
+          styles={{
+            drawer: {
+              shadowColor: '#000000',
+              shadowOpacity: 0.8,
+              shadowRadius: 3,
+            },
+          }}
+          tweenHandler={(ratio) => {  // eslint-disable-line
+            return {
+              drawer: { shadowRadius: ratio < 0.2 ? ratio * 5 * 5 : 5 },
+              main: {
+                opacity: (2 - ratio) / 2,
+              },
+            };
+          }}
+          negotiatePan
+        >
 
-            {/*
-              <View style={styles.container}>
-                <PullRefreshScrollView style={styles.pullRefresh} ref="PullRefresh" onRefresh={() => this.onRefresh()}>
+          <Image source={require('../assets/images/test.png')} style={styles.backgroundImage}>
+            <Container>
+
+                <Header>
+                    <Button transparent onPress={this.openDrawer}>
+                        <Icon name='ios-menu' />
+                    </Button>
+                    <Title>{ title }</Title>
+                    <Button transparent onPress={this.closeDrawer}>
+                        <Icon name='ios-menu' />
+                    </Button>
+                </Header>
+
+                <Content>
                   <CurrentComponent common={this.props.common} cards={this.props.cards} />
-                </PullRefreshScrollView>
-                { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
-              </View>
-            */}
+                  { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
+                </Content>
 
-            <Content>
-              <CurrentComponent common={this.props.common} cards={this.props.cards} />
-              { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
-            </Content>
+                <Footer >
+                    <FooterTab>
+                        <Button onPress={this._changeComponent.bind(this, 'Home', Home)} active={ title === 'Home'}>
+                            Apps
+                            <Icon name='ios-apps-outline' />
+                        </Button>
+                        <Button onPress={this._changeComponent.bind(this, 'page2', page2)} active={ title === 'page2'}>
+                            Camera
+                            <Icon name='ios-camera-outline' />
+                        </Button>
+                        <Button onPress={this._changeComponent.bind(this, 'page3', page3)} active={ title === 'page3'}>
+                            Navigate
+                            <Icon name='ios-compass' />
+                        </Button>
+                        <Button onPress={this._changeComponent.bind(this, 'page4', page4)} active={ title === 'page4'}>
+                            Contact
+                            <Icon name='ios-contact-outline' />
+                        </Button>
+                        <Button onPress={this._changeComponent.bind(this, 'page5', page5)} active={ title === 'page5'}>
+                            Contact
+                            <Icon name='ios-contact-outline' />
+                        </Button>
+                    </FooterTab>
+                </Footer>
 
-            <Footer >
-                <FooterTab>
-                    <Button onPress={this._changeComponent.bind(this, 'home', home)} active={ title === 'home'}>
-                        Apps
-                        <Icon name='ios-apps-outline' />
-                    </Button>
-                    <Button onPress={this._changeComponent.bind(this, 'page2', page2)} active={ title === 'page2'}>
-                        Camera
-                        <Icon name='ios-camera-outline' />
-                    </Button>
-                    <Button onPress={this._changeComponent.bind(this, 'page3', page3)} active={ title === 'page3'}>
-                        Navigate
-                        <Icon name='ios-compass' />
-                    </Button>
-                    <Button onPress={this._changeComponent.bind(this, 'page4', page4)} active={ title === 'page4'}>
-                        Contact
-                        <Icon name='ios-contact-outline' />
-                    </Button>
-                    <Button onPress={this._changeComponent.bind(this, 'page5', page5)} active={ title === 'page5'}>
-                        Contact
-                        <Icon name='ios-contact-outline' />
-                    </Button>
-                </FooterTab>
-            </Footer>
-        </Container>
-      </Image>
+            </Container>
+          </Image>
+        </Drawer>
     )
   }
 }
