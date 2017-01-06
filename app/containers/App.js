@@ -7,11 +7,8 @@ import { Container, Header, Title, Content, Footer, FooterTab, Button, Icon, Bad
 
 //为方便修改下拉控件样式，直接把包引到源目录 @1.1.0
 import PullRefreshScrollView from '../components/react-native-pullRefreshScrollView/'
-
 import Cards from '../pages/Cards'
 import Decks from '../pages/Decks'
-
-const { width, height } = Dimensions.get('window')
 
 //映射 state 和 actions 到 Props
 const mapStateToProps = (state) => ({
@@ -55,7 +52,7 @@ class App extends Component {
     this.props.cardsSearch('info', {
 
     }, 'Mountain')
-    
+
   }
 
   _onRefresh() {
@@ -121,6 +118,7 @@ class App extends Component {
   }
 }
 
+const { width, height } = Dimensions.get('window')
 const styles = StyleSheet.create({
   container: {
     flex: 1
