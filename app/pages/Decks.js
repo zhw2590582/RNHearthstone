@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-export default class MyScene extends Component {
+export default class Decks extends Component {
   static defaultProps = {
-    title: 'Page03'
+    title: '卡组'
   };
 
   render() {
