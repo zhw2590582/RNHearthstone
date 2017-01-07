@@ -78,7 +78,7 @@ export default class Cards extends Component {
       return <TouchableOpacity
                 onPress={that._cardsClick.bind(a,a.cardId)}
                 key={a.cardId}
-                style={{width: 100, height: 151, marginTop: -5, backgroundColor:'rgba(0,0,0,0)'}}>
+                style={{width: 100, height: 151, marginTop: -2, backgroundColor:'rgba(0,0,0,0)'}}>
                 <Image source={{uri: a.img}} style={{width: 100, height: 151}}></Image>
                 <Text style={{textAlign: 'center',color: '#624830', fontSize:12, marginTop: -5}}>{a.name}</Text>
              </TouchableOpacity>

@@ -48,15 +48,17 @@ class App extends Component {
     this.props.loading(false);
   }
 
-  //顶部按钮
+  //过滤器
   _openFilter() {
     console.log('openFilter');
   }
 
+  //职业
   _openClass() {
     console.log('openClass');
   }
 
+  //搜索
   _openSearch() {
     console.log('openSearch');
   }
@@ -78,7 +80,6 @@ class App extends Component {
             <Text style={{fontSize:12,}}>搜索</Text>
           </TouchableOpacity>
         </View>
-
         <View style={styles.container}>
             <CurrentComponent common={common} cards={cards} cardsSearch={cardsSearch} />
           { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
