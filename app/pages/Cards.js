@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, ListView } from 'react-native';
+import { View, Text, Image, StyleSheet, ListView,TouchableOpacity } from 'react-native';
 import PullRefreshScrollView from '../components/react-native-pullRefreshScrollView/'
 
 export default class Cards extends Component {
@@ -16,11 +16,12 @@ export default class Cards extends Component {
         'health': null //回血
       },
       filter: 'Dream', //默认显示德鲁伊
-      loadPages: 1, //已加载页数
-      pageNum: 10 //每次加载数目
+      page: 1, //当前页
+      allPages: 10 //总页
     };
     this._cardsSearch = this._cardsSearch.bind(this);
     this._onRefresh = this._onRefresh.bind(this);
+    this._needHandlderArgument = this._needHandlderArgument.bind(this);
   }
 
   componentDidMount() {
@@ -40,13 +41,19 @@ export default class Cards extends Component {
     }, 2000);
   }
 
+  //下拉刷新
+  _needHandlderArgument(argument) {
+    console.log('argument');
+  }
+
   render() {
     const { common, cards } = this.props;
 
     //选取10个
-    let page = cards.filter((a,b) =>(b >= this.state.pageNum*(this.state.loadPages-1)) && (b < this.state.pageNum*this.state.loadPages));
-    let fuck = page.map(function(a, b) {
-      return <Image source={{uri: a.img}} style={{width: 100, height: 151}}></Image>
+    let cardsDom = cards.map(function(a, b) {
+      return <TouchableOpacity key={a.cardId} style={{width: 100, height: 151,backgroundColor:'rgba(0,0,0,0)'}} >
+                <Image source={{uri: a.img}} style={{width: 100, height: 151}}></Image>
+             </TouchableOpacity>
     })
 
     return (
@@ -55,9 +62,11 @@ export default class Cards extends Component {
           flexWrap:'wrap',
           flexDirection: 'row',
           justifyContent:'space-around',
-          backgroundColor:'rgba(0,0,0,0)'
+          backgroundColor:'rgba(0,0,0,0)',
+          paddingLeft:5,
+          paddingRight:5
         }}>
-          {fuck}
+          {cardsDom}
         </View>
       </PullRefreshScrollView>
     );

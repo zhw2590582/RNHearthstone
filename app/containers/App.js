@@ -67,7 +67,7 @@ class App extends Component {
 
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
-        <View style={{marginTop:28,height:50, flexDirection: 'row',justifyContent:'space-between'}}>
+        <View style={{marginTop:28,height:40, flexDirection: 'row',justifyContent:'space-between'}}>
           <TouchableOpacity onPress={this._openFilter} style={{paddingLeft:19,backgroundColor:'rgba(0,0,0,0)'}} >
             <Text style={{fontSize:12,}}>过滤器</Text>
           </TouchableOpacity>
