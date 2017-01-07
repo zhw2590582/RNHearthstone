@@ -12,59 +12,60 @@ export function fetchHearthstone(name, option, filter) {
   let nameSt
   switch(name) {
     case 'cards': {
-      nameSt = `${HSObj.cards}?`
+      nameSt = `${HSObj.link.cards}?`
       break;
     }
-    case 'backs': {
-      nameSt = `${HSObj.backs}?`
+    case 'cardbacks': {
+      nameSt = `${HSObj.link.backs}?`
       break;
     }
     case 'search': {
-      nameSt = `${HSObj.search}/${filter}?`
+      nameSt = `${HSObj.link.search}/${filter}?`
       break;
     }
     case 'sets': {
-      nameSt = `${HSObj.sets}/${filter}?`
+      nameSt = `${HSObj.link.sets}/${filter}?`
       break;
     }
     case 'classes': {
-      nameSt = `${HSObj.classes}/${filter}?`
+      nameSt = `${HSObj.link.classes}/${filter}?`
       break;
     }
     case 'factions': {
-      nameSt = `${HSObj.factions}/${filter}?`
+      nameSt = `${HSObj.link.factions}/${filter}?`
       break;
     }
     case 'qualities': {
-      nameSt = `${HSObj.qualities}/${filter}?`
+      nameSt = `${HSObj.link.qualities}/${filter}?`
       break;
     }
     case 'races': {
-      nameSt = `${HSObj.races}/${filter}?`
+      nameSt = `${HSObj.link.races}/${filter}?`
       break;
     }
     case 'types': {
-      nameSt = `${HSObj.types}/${filter}?`
+      nameSt = `${HSObj.link.types}/${filter}?`
       break;
     }
     case 'info': {
-      nameSt = `${HSObj.info}?`
+      nameSt = `${HSObj.link.info}?`
       break;
     }
     default: {
-      nameSt = `${HSObj.cards}?`
+      nameSt = `${HSObj.link.cards}?`
     }
   }
 
   //拼接选项
   const keys = ['locale=zhCN']
   Object.keys(option).forEach((i) => {
-    keys.push(i + '=' + option[i])
+    !!option[i] && keys.push(i + '=' + option[i])
   })
   const keysSt = keys.join('&')
 
   //异步请求
   const url = nameSt + keysSt;
+  console.log(url);
   return fetch(url, HSObj.fetchInfo).then(response => response.json())
 }
 

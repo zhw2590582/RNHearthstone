@@ -22,7 +22,7 @@ class App extends Component {
 
   static propTypes = {
     common: React.PropTypes.object.isRequired,
-    cards: React.PropTypes.object.isRequired
+    cards: React.PropTypes.array.isRequired
   }
 
   constructor() {
@@ -40,19 +40,10 @@ class App extends Component {
   componentDidMount() {
     //初始化应用
     this.props.init(true);
-
-    console.log(this.props);
-
     var self = this;
     setInterval(function() {
-      self.setState({ num: self.state.num + 1 })
+      //self.setState({ num: self.state.num + 1 })
     }, 1000);
-
-    //第一参数为类型(字符串)，第二参数为选项(对象)，第三参数为过滤器(字符串)
-    this.props.cardsSearch('info', {
-
-    }, 'Mountain')
-
   }
 
   _onRefresh() {
@@ -79,7 +70,7 @@ class App extends Component {
 
   render() {
     const { CurrentComponent, title} = this.state;
-    const { common, cards } = this.props;
+    const { common, cards, cardsSearch } = this.props;
 
     return (
       <Image source={require('../assets/images/test.png')} style={styles.backgroundImage}>
@@ -97,7 +88,7 @@ class App extends Component {
 
             <View style={styles.container}>
               <PullRefreshScrollView style={styles.pullRefresh} ref="PullRefresh" onRefresh={() => this._onRefresh()}>
-                <CurrentComponent common={this.props.common} cards={this.props.cards} />
+                <CurrentComponent common={common} cards={cards} cardsSearch={cardsSearch} />
               </PullRefreshScrollView>
               { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
             </View>
