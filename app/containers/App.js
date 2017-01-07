@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
-import { StyleSheet, Image, Text ,Dimensions, View} from 'react-native'
+import { StyleSheet, Image, Text ,Dimensions, View, TouchableOpacity} from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actionCreators from '../actions/'
-import { Container, Header, Title, Content, Footer, FooterTab, Button, Icon, Badge, Spinner} from 'native-base'
+import { Spinner} from 'native-base'
 import Cards from '../pages/Cards'
 import Decks from '../pages/Decks'
 
@@ -36,7 +36,6 @@ class App extends Component {
 
   componentDidMount() {
     //初始化应用
-    this.props.init(true);
     var self = this;
     setInterval(function() {
       //self.setState({ num: self.state.num + 1 })
@@ -54,6 +53,10 @@ class App extends Component {
     console.log('openFilter');
   }
 
+  _openClass() {
+    console.log('openClass');
+  }
+
   _openSearch() {
     console.log('openSearch');
   }
@@ -63,35 +66,24 @@ class App extends Component {
     const { common, cards, cardsSearch } = this.props;
 
     return (
-      <Image source={require('../assets/images/test.png')} style={styles.backgroundImage}>
+      <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
+        <View style={{marginTop:28,height:50, flexDirection: 'row',justifyContent:'space-between'}}>
+          <TouchableOpacity onPress={this._openFilter} style={{paddingLeft:19,backgroundColor:'rgba(0,0,0,0)'}} >
+            <Text style={{fontSize:12,}}>过滤器</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this._openClass} style={{paddingRight:10,backgroundColor:'rgba(0,0,0,0)'}}>
+            <Text style={{fontSize:14,}}>德鲁伊</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this._openSearch} style={{paddingRight:25,backgroundColor:'rgba(0,0,0,0)'}}>
+            <Text style={{fontSize:12,}}>搜索</Text>
+          </TouchableOpacity>
+        </View>
 
-        <Container>
-            <Header>
-              <Button transparent onPress={this._openFilter}>
-                  <Text>过滤</Text>
-              </Button>
-              <Title onPress={this._openTitle}>{ this.state.title }</Title>
-              <Button transparent onPress={this._openSearch}>
-                  <Text>搜索</Text>
-              </Button>
-            </Header>
+        <View style={styles.container}>
+            <CurrentComponent common={common} cards={cards} cardsSearch={cardsSearch} />
+          { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
+        </View>
 
-            <View style={styles.container}>
-                <CurrentComponent common={common} cards={cards} cardsSearch={cardsSearch} />
-              { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
-            </View>
-
-            <Footer >
-              <FooterTab>
-                  <Button onPress={this._changeComponent.bind(this, '卡牌', Cards)} active={ title === '卡牌'}>
-                      卡牌
-                  </Button>
-                  <Button onPress={this._changeComponent.bind(this, '卡组', Decks)} active={ title === '卡组'}>
-                      卡组
-                  </Button>
-              </FooterTab>
-            </Footer>
-        </Container>
       </Image>
     )
   }
@@ -121,14 +113,6 @@ const styles = StyleSheet.create({
     marginTop: -100,
     borderRadius: 10,
     backgroundColor:'rgba(0,0,0,0.5)'
-  },
-  scrollItem: {
-    flex: 1,
-    height: 80,
-    marginBottom: 10,
-    backgroundColor: '#ccc',
-    alignItems: 'center',
-    justifyContent: 'center'
   }
 });
 

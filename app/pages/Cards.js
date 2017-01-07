@@ -6,7 +6,6 @@ export default class Cards extends Component {
   constructor() {
     super();
     this.state = {
-      cards: [], //初始化卡牌
       name: 'classes',
       option: {
         'attack': null, //攻击力
@@ -16,7 +15,7 @@ export default class Cards extends Component {
         'durability': null, //品质
         'health': null //回血
       },
-      filter: 'Druid', //默认显示德鲁伊
+      filter: 'Dream', //默认显示德鲁伊
       loadPages: 1, //已加载页数
       pageNum: 10 //每次加载数目
     };
@@ -46,16 +45,19 @@ export default class Cards extends Component {
 
     //选取10个
     let page = cards.filter((a,b) =>(b >= this.state.pageNum*(this.state.loadPages-1)) && (b < this.state.pageNum*this.state.loadPages));
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    let dataSource = ds.cloneWithRows(page)
+    let fuck = page.map(function(a, b) {
+      return <Image source={{uri: a.img}} style={{width: 100, height: 151}}></Image>
+    })
 
     return (
       <PullRefreshScrollView style={styles.pullRefresh} ref="PullRefresh" onRefresh={() => this._onRefresh()}>
-        <View style={styles.cardScontainer}>
-          <ListView
-            dataSource={dataSource}
-            renderRow={(rowData) => <Text>{rowData.name}</Text>}
-          />
+        <View style={{
+          flexWrap:'wrap',
+          flexDirection: 'row',
+          justifyContent:'space-around',
+          backgroundColor:'rgba(0,0,0,0)'
+        }}>
+          {fuck}
         </View>
       </PullRefreshScrollView>
     );
@@ -63,7 +65,5 @@ export default class Cards extends Component {
 }
 
 const styles = StyleSheet.create({
-  cardScontainer: {
-    backgroundColor:'rgba(0,0,0,0)'
-  }
+
 });
