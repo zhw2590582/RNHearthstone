@@ -26,6 +26,7 @@ export default class Cards extends Component {
   }
 
   componentDidMount() {
+    //初始化
     this._cardsSearch()
   }
 
@@ -42,11 +43,6 @@ export default class Cards extends Component {
     setTimeout(function() {
       self.refs.PullRefresh.onRefreshEnd();
     }, 2000);
-  }
-
-  //展示卡牌
-  _cardsShow() {
-
   }
 
   //卡牌详情
