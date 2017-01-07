@@ -62,12 +62,12 @@ class App extends Component {
   }
 
   render() {
-    const { CurrentComponent, title} = this.state;
+    const { CurrentComponent, title, page} = this.state;
     const { common, cards, cardsSearch } = this.props;
 
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
-        <View style={{marginTop:28,height:40, flexDirection: 'row',justifyContent:'space-between'}}>
+        <View style={{marginTop:28,height:30, flexDirection: 'row',justifyContent:'space-between'}}>
           <TouchableOpacity onPress={this._openFilter} style={{paddingLeft:19,backgroundColor:'rgba(0,0,0,0)'}} >
             <Text style={{fontSize:12,}}>过滤器</Text>
           </TouchableOpacity>
@@ -83,7 +83,6 @@ class App extends Component {
             <CurrentComponent common={common} cards={cards} cardsSearch={cardsSearch} />
           { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
         </View>
-
       </Image>
     )
   }
