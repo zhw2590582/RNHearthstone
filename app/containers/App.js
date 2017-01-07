@@ -4,9 +4,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actionCreators from '../actions/'
 import { Container, Header, Title, Content, Footer, FooterTab, Button, Icon, Badge, Spinner} from 'native-base'
-
-//为方便修改下拉控件样式，直接把包引到源目录 @1.1.0
-import PullRefreshScrollView from '../components/react-native-pullRefreshScrollView/'
 import Cards from '../pages/Cards'
 import Decks from '../pages/Decks'
 
@@ -46,13 +43,6 @@ class App extends Component {
     }, 1000);
   }
 
-  _onRefresh() {
-    var self = this;
-    setTimeout(function() {
-      self.refs.PullRefresh.onRefreshEnd();
-    }, 2000);
-  }
-
   //页面跳转
   _changeComponent(title, CurrentComponent) {
     this.setState({title, CurrentComponent})
@@ -87,9 +77,7 @@ class App extends Component {
             </Header>
 
             <View style={styles.container}>
-              <PullRefreshScrollView style={styles.pullRefresh} ref="PullRefresh" onRefresh={() => this._onRefresh()}>
                 <CurrentComponent common={common} cards={cards} cardsSearch={cardsSearch} />
-              </PullRefreshScrollView>
               { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
             </View>
 
