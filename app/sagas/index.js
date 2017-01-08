@@ -78,10 +78,15 @@ export function * hearthstoneAsync(state) {
   yield put(actions.loading(true))
   try {
     const data = yield call(fetchHearthstone, state.name, state.option, state.filter)
-    yield put(actions.cardsReceive(data))
+    if (data['error'] !== undefined) {
+      yield put(actions.tips(true, '查询失败，请重试'))
+    } else {
+      yield put(actions.cardsReceive(data))
+    }
     yield put(actions.loading(false))
   } catch (e) {
     yield put(actions.loading(false))
+    yield put(actions.tips(true, e))
   }
 }
 
@@ -96,10 +101,16 @@ export function * cardAsync(state) {
   yield put(actions.loading(true))
   try {
     const data = yield call(fetchHearthstone, 'single', {}, state.id)
-    yield put(actions.cardsDetilReceive(data[0]['img'], data[0]['cardId']))
+    if (data['error'] !== undefined) {
+      yield put(actions.tips(true, '查询失败，请重试'))
+      yield put(actions.cardsDetilClose())
+    } else {
+      yield put(actions.cardsDetilReceive(data[0]['img'], data[0]['cardId']))
+    }
     yield put(actions.loading(false))
   } catch (e) {
     yield put(actions.loading(false))
+    yield put(actions.tips(true, e))
   }
 }
 

@@ -16,7 +16,7 @@ export default class Cards extends Component {
         'durability': null, //品质
         'health': null //回血
       },
-      filter: 'Druid', //默认显示德鲁伊
+      filter: this.props.chooseClass, //默认显示德鲁伊
       page: 1
     };
     this._cardsSearch = this._cardsSearch.bind(this);
@@ -57,16 +57,13 @@ export default class Cards extends Component {
   }
 
   render() {
-    const { common, cards, page } = this.props;
+    const { common, cards, page, chooseClass } = this.props;
     const that = this;
     cardsCache = cards;
-
     const tmp = cardsCache.filter(function(a, b) {
       return (a.img !== undefined) && (a.type !== 'Hero') && (a.type !== 'Hero Power') //过滤掉没有图像、英雄本身
     });
-
     allPages = Math.ceil(tmp.length/9); //总页数
-
     const cardsDom = tmp.filter(function(a, b) {
       return (b < that.state.page * 9) && (b >= (that.state.page - 1) * 9) //每页选9个
     }).map(function(a, b) {

@@ -27,12 +27,18 @@ class App extends Component {
     super();
     this.state = {
       title: '卡牌',
-      num: 0
+      num: 0,
+      openClass:false,
+      chooseClassCN:'德鲁伊',
+      chooseClass:'Druid' //默认显示德鲁伊
     };
     this._openFilter = this._openFilter.bind(this);
     this._openSearch = this._openSearch.bind(this);
     this._cardsClick = this._cardsClick.bind(this);
     this._cardsClose = this._cardsClose.bind(this);
+    this._openClass = this._openClass.bind(this);
+    this._closeClass = this._closeClass.bind(this);
+    this._chooseClass = this._chooseClass.bind(this);
   }
 
   componentDidMount() {
@@ -50,7 +56,61 @@ class App extends Component {
 
   //职业
   _openClass() {
-    console.log('openClass');
+    this.setState({openClass: true})
+  }
+
+  _closeClass() {
+    this.setState({openClass: false})
+  }
+
+  _chooseClass(name) {
+    let nameSt
+    switch(name) {
+      case '德鲁伊': {
+        nameSt = 'Druid'
+        break;
+      }
+      case '猎人': {
+        nameSt = 'Hunter'
+        break;
+      }
+      case '法师': {
+        nameSt = 'Mage'
+        break;
+      }
+      case '圣骑士': {
+        nameSt = 'Paladin'
+        break;
+      }
+      case '牧师': {
+        nameSt = 'Priest'
+        break;
+      }
+      case '潜行者': {
+        nameSt = 'Rogue'
+        break;
+      }
+      case '萨满祭司': {
+        nameSt = 'Shaman'
+        break;
+      }
+      case '术士': {
+        nameSt = 'Warlock'
+        break;
+      }
+      case '战士': {
+        nameSt = 'Warrior'
+        break;
+      }
+      case '中立': {
+        nameSt = 'Neutral'
+        break;
+      }
+      default: {
+        nameSt = 'Druid'
+      }
+    }
+    this.setState({ chooseClass: nameSt, chooseClassCN:name, openClass: false })
   }
 
   //搜索
@@ -73,10 +133,10 @@ class App extends Component {
 
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
-        <Header _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
+        <Header chooseClassCN={this.state.chooseClassCN} _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
 
         <View style={styles.container}>
-            <Cards tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} _cardsClick={this._cardsClick} />
+            <Cards chooseClass={this.state.chooseClass} tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} _cardsClick={this._cardsClick} />
 
           { //加载器
             common.loading ?
@@ -101,6 +161,26 @@ class App extends Component {
               <View style={styles.tips}>
                 <Text style={styles.tipsInner}>{common.tips.info}</Text>
               </View>
+            </View>
+            :null
+          }
+
+          { //选择职业
+            this.state.openClass ?
+            <View style={styles.cardWrap}>
+              <TouchableOpacity style={styles.cardWrapBg} onPress={this._closeClass}></TouchableOpacity>
+              <Image source={require('../assets/images/classBg.png')} style={styles.classBg}>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'德鲁伊')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'猎人')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'法师')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'圣骑士')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'牧师')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'潜行者')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'萨满祭司')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'术士')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'战士')}></TouchableOpacity>
+                <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'中立')}></TouchableOpacity>
+              </Image>
             </View>
             :null
           }
@@ -172,6 +252,23 @@ const styles = StyleSheet.create({
     right:0,
     height,
     width,
+    backgroundColor:'rgba(0,0,0,0.7)',
+  },
+  classBg:{
+    position: 'absolute',
+    top:0,
+    width:320,
+    height: 135,
+    flexWrap:'wrap',
+    flexDirection: 'row',
+    justifyContent:'space-around',
+    paddingLeft:30,
+    paddingRight:30,
+  },
+  classBtn:{
+    width:45,
+    height: 45,
+    marginTop:8,
     backgroundColor:'rgba(0,0,0,0.7)',
   }
 });
