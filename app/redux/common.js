@@ -1,9 +1,9 @@
-import { INIT, LOADING, ERROR } from '../actions/';
+import { INIT, LOADING, TIPS } from '../actions/';
 
 const initialState = {
   init: false,
   loading: false,
-  error: {
+  tips: {
     state: false,
     info: ''
   }
@@ -21,9 +21,9 @@ export default function common(state = initialState, action) {
         loading: action.play
       })
     }
-    case ERROR: {
+    case TIPS: {
       return Object.assign({}, state, {
-        error: {
+        tips: {
           state: action.play,
           info: action.info
         }

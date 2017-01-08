@@ -78,12 +78,17 @@ export function * hearthstoneAsync(state) {
     yield put(actions.loading(false))
   } catch (e) {
     yield put(actions.loading(false))
-    yield put(actions.error(e))
   }
+}
+
+export function * tipsAsync(state) {
+  yield call(delay, 1000)
+  yield put(actions.tips(false,''))
 }
 
 export default function * rootSaga() {
   yield * [
-    takeEvery('CARDS_SEARCH', hearthstoneAsync)
+    takeLatest('CARDS_SEARCH', hearthstoneAsync),
+    takeLatest('TIPS', tipsAsync)
   ]
 }

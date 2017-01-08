@@ -1,7 +1,7 @@
 export const CARDS_SEARCH = 'CARDS_SEARCH';
 export const CARDS_RECEIVE = 'CARDS_RECEIVE';
 export const LOADING = 'LOADING';
-export const ERROR = 'ERROR';
+export const TIPS = 'TIPS';
 export const INIT = 'INIT';
 
 //请求卡牌
@@ -31,9 +31,9 @@ export function loading(play) {
 }
 
 //错误信息
-export function error(play, info) {
+export function tips(play, info) {
   return {
-    type: ERROR,
+    type: TIPS,
     play,
     info
   };

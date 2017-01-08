@@ -4,8 +4,9 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actionCreators from '../actions/'
 import { Spinner} from 'native-base'
-import Cards from '../pages/Cards'
-import Decks from '../pages/Decks'
+
+import Cards from '../components/Cards'
+import Header from '../components/Header'
 
 //映射 state 和 actions 到 Props
 const mapStateToProps = (state) => ({
@@ -26,10 +27,8 @@ class App extends Component {
     super();
     this.state = {
       title: '卡牌',
-      num: 0,
-      CurrentComponent: Cards
+      num: 0
     };
-    this._changeComponent = this._changeComponent.bind(this);
     this._openFilter = this._openFilter.bind(this);
     this._openSearch = this._openSearch.bind(this);
   }
@@ -40,12 +39,6 @@ class App extends Component {
     setInterval(function() {
       //self.setState({ num: self.state.num + 1 })
     }, 1000);
-  }
-
-  //页面跳转
-  _changeComponent(title, CurrentComponent) {
-    this.setState({title, CurrentComponent})
-    this.props.loading(false);
   }
 
   //过滤器
@@ -64,26 +57,34 @@ class App extends Component {
   }
 
   render() {
-    const { CurrentComponent, title, page} = this.state;
-    const { common, cards, cardsSearch } = this.props;
+    const { common, cards, cardsSearch, tips } = this.props;
 
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
-        <View style={{marginTop:28,height:30, flexDirection: 'row',justifyContent:'space-between'}}>
-          <TouchableOpacity onPress={this._openFilter} style={{paddingLeft:19,backgroundColor:'rgba(0,0,0,0)'}} >
-            <Text style={{fontSize:12,}}>过滤器</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this._openClass} style={{paddingRight:10,backgroundColor:'rgba(0,0,0,0)'}}>
-            <Text style={{fontSize:14,}}>德鲁伊</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this._openSearch} style={{paddingRight:25,backgroundColor:'rgba(0,0,0,0)'}}>
-            <Text style={{fontSize:12,}}>搜索</Text>
-          </TouchableOpacity>
-        </View>
+        <Header _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
+
         <View style={styles.container}>
-            <CurrentComponent common={common} cards={cards} cardsSearch={cardsSearch} />
-          { common.loading === true ? <View style={styles.loadingWrap}><Spinner size='small' color='#fff' style={styles.loading}/></View> : null }
+            <Cards tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} />
+
+          {
+            common.loading ?
+            <View style={styles.loadingWrap}>
+              <Spinner size='small' color='#fff' style={styles.loading}/>
+            </View>
+            :null
+          }
+
+          {
+            common.tips.state ?
+            <View style={styles.tipsWrap}>
+              <View style={styles.tips}>
+                <Text style={styles.tipsInner}>{common.tips.info}</Text>
+              </View>
+            </View>
+            :null
+          }
         </View>
+
       </Image>
     )
   }
@@ -113,6 +114,26 @@ const styles = StyleSheet.create({
     marginTop: -100,
     borderRadius: 10,
     backgroundColor:'rgba(0,0,0,0.5)'
+  },
+  tipsWrap:{
+    flex: 1,
+    height,
+    width,
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  tips:{
+    width: 220,
+    height: 30,
+    marginTop: 0,
+    borderRadius: 5,
+    backgroundColor:'rgba(0,0,0,0.7)'
+  },
+  tipsInner:{
+    paddingTop:7,
+    textAlign: 'center',
+    color:'#fff',
   }
 });
 

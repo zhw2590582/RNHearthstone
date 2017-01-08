@@ -57,6 +57,7 @@ export default class Cards extends Component {
     } else if ( o === 'right' && this.state.page < allPages) {
       this.setState({page: this.state.page + 1})
     } else {
+      this.props.tips(true, '已经到尽头了哦')
       return false
     }
   }
