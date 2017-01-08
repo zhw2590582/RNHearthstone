@@ -20,8 +20,6 @@ export default class Cards extends Component {
       page: 1
     };
     this._cardsSearch = this._cardsSearch.bind(this);
-    this._onRefresh = this._onRefresh.bind(this);
-    this._pagesClick = this._pagesClick.bind(this);
   }
 
   componentDidMount() {
@@ -36,35 +34,15 @@ export default class Cards extends Component {
     this.props.cardsSearch(this.state.name, this.state.option, this.state.filter)
   }
 
-  //下拉刷新
-  _onRefresh() {
-    var self = this;
-    setTimeout(function() {
-      self.refs.PullRefresh.onRefreshEnd();
-    }, 2000);
-  }
-
-  //翻页
-  _pagesClick(o) {
-    if ( o === 'left' && this.state.page > 1) {
-      this.setState({page: this.state.page - 1})
-    } else if ( o === 'right' && this.state.page < allPages) {
-      this.setState({page: this.state.page + 1})
-    } else {
-      this.props.tips(true, '已经到尽头了哦')
-      return false
-    }
-  }
-
   render() {
-    const { common, cards, page, chooseClass } = this.props;
+    const { common, cards, page, chooseClass, _pagesClick} = this.props;
     const that = this;
     const tmp = cards.filter(function(a, b) {
       return (a.img !== undefined) && (a.type !== 'Hero') && (a.type !== 'Hero Power') //过滤掉没有图像、英雄本身
     });
     allPages = Math.ceil(tmp.length/9); //总页数
     const cardsDom = tmp.filter(function(a, b) {
-      return (b < that.state.page * 9) && (b >= (that.state.page - 1) * 9) //每页选9个
+      return (b < that.props.page * 9) && (b >= (that.props.page - 1) * 9) //每页选9个
     }).map(function(a, b) {
       return <TouchableOpacity
                 onPress={that.props._cardsClick.bind(a, true, a.img)}
@@ -100,15 +78,15 @@ export default class Cards extends Component {
           paddingRight:5
         }}>
           <TouchableOpacity
-            onPress={this._pagesClick.bind(this,'left')}
+            onPress={_pagesClick.bind(this,'left',allPages)}
             style={{paddingLeft:10,backgroundColor:'rgba(0,0,0,0)'}}>
             <Image style={{width:50,height:50}} source={require('../assets/images/left.png')}></Image>
           </TouchableOpacity>
 
-          <Text style={{fontSize:14,paddingTop:19,color:'#fff'}}>{this.state.page} / {allPages}</Text>
+          <Text style={{fontSize:14,paddingTop:19,color:'#fff'}}>{this.props.page} / {allPages}</Text>
 
           <TouchableOpacity
-            onPress={this._pagesClick.bind(this,'right')}
+            onPress={_pagesClick.bind(this,'right',allPages)}
             style={{paddingRight:10,backgroundColor:'rgba(0,0,0,0)'}}>
             <Image style={{width:50,height:50}} source={require('../assets/images/right.png')}></Image>
           </TouchableOpacity>

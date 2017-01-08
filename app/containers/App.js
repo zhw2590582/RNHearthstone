@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { StyleSheet, Image, Text ,Dimensions, View, TouchableOpacity} from 'react-native'
+import { StyleSheet, Image, Text , Dimensions, View, TouchableOpacity, TextInput} from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actionCreators from '../actions/'
@@ -36,16 +36,24 @@ class App extends Component {
         'health': null //回血
       },
       openClass:false,
+      page:1,
       filterCN:'德鲁伊',
-      filter:'Druid' //默认显示德鲁伊
+      filter:'Druid', //默认显示德鲁伊
+      search:{
+        state: false,
+        text:''
+      },
+      text:''
     };
     this._openFilter = this._openFilter.bind(this);
     this._openSearch = this._openSearch.bind(this);
+    this._closeSearch = this._closeSearch.bind(this);
     this._cardsClick = this._cardsClick.bind(this);
     this._cardsClose = this._cardsClose.bind(this);
     this._openClass = this._openClass.bind(this);
     this._closeClass = this._closeClass.bind(this);
     this._chooseClass = this._chooseClass.bind(this);
+    this._pagesClick = this._pagesClick.bind(this);
   }
 
   componentDidMount() {
@@ -58,11 +66,13 @@ class App extends Component {
 
   //过滤器
   _openFilter() {
+    this._allClose()
     console.log('openFilter');
   }
 
   //职业
   _openClass() {
+    this._allClose()
     this.setState({openClass: true})
   }
 
@@ -117,17 +127,24 @@ class App extends Component {
         nameSt = 'Druid'
       }
     }
-    this.setState({ filter: nameSt, filterCN:name, openClass: false })
+    this.setState({ filter: nameSt, filterCN:name, openClass: false, page:1 })
     this.props.cardsSearch('classes', this.state.option, nameSt )
   }
 
   //搜索
   _openSearch() {
-    console.log('openSearch');
+    this._allClose()
+    this.setState({ search: {state: true, text:''} })
+  }
+
+  //搜索关闭
+  _closeSearch() {
+    this.setState({ search: {state: false, text:''} })
   }
 
   //卡牌详情
   _cardsClick(play, url) {
+    this._allClose()
     this.props.cardsDetilSearch(play,url)
   }
 
@@ -136,15 +153,42 @@ class App extends Component {
     this.props.cardsDetilClose()
   }
 
+  //关闭所有弹窗
+  _allClose() {
+    this._cardsClose() //卡牌详情
+    this._closeClass() //职业选择
+    this._closeSearch() //搜索
+  }
+
+  //翻页
+  _pagesClick(o, allPages) {
+    if ( o === 'left' && this.state.page > 1) {
+      this.setState({page: this.state.page - 1})
+    } else if ( o === 'right' && this.state.page < allPages) {
+      this.setState({page: this.state.page + 1})
+    } else {
+      this.props.tips(true, '已经到尽头了哦')
+      return false
+    }
+  }
+
   render() {
     const { common, cards, cardsSearch, tips } = this.props;
-
+    console.log(this.state.search.text);
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
         <Header filterCN={this.state.filterCN} _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
 
         <View style={styles.container}>
-          <Cards filter={this.state.filter} tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} _cardsClick={this._cardsClick} />
+          <Cards filter={this.state.filter}
+                tips={tips}
+                page={this.state.page}
+                common={common}
+                cards={cards}
+                cardsSearch={cardsSearch}
+                _cardsClick={this._cardsClick}
+                _pagesClick={this._pagesClick}
+          />
 
           { //加载器
             common.loading ?
@@ -188,6 +232,21 @@ class App extends Component {
                 <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'术士')}></TouchableOpacity>
                 <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'战士')}></TouchableOpacity>
                 <TouchableOpacity style={styles.classBtn} onPress={this._chooseClass.bind(this,'中立')}></TouchableOpacity>
+              </Image>
+            </View>
+            :null
+          }
+
+          { //搜索
+            this.state.search.state ?
+            <View style={styles.cardWrap}>
+              <TouchableOpacity style={styles.cardWrapBg} onPress={this._closeSearch}></TouchableOpacity>
+              <Image source={require('../assets/images/searchBg.png')} style={styles.searchBg}>
+                <TextInput
+                  style={{height: 35,color:'#fff',paddingLeft:40,fontSize:14}}
+                  placeholder="搜索卡牌!"
+                  onChangeText={(text) => this.setState({search:{state:true,text}})}
+                />
               </Image>
             </View>
             :null
@@ -277,6 +336,12 @@ const styles = StyleSheet.create({
     width:45,
     height: 45,
     marginTop:8,
+  },
+  searchBg:{
+    position: 'absolute',
+    top:0,
+    width:320,
+    height: 37,
   }
 });
 
