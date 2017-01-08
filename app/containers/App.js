@@ -26,11 +26,18 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      title: '卡牌',
-      num: 0,
+      name: 'classes',
+      option: {
+        'attack': null, //攻击力
+        'callback': null, //回调
+        'collectible': 1, //为1时有效
+        'cost': null, //费用
+        'durability': null, //品质
+        'health': null //回血
+      },
       openClass:false,
-      chooseClassCN:'德鲁伊',
-      chooseClass:'Druid' //默认显示德鲁伊
+      filterCN:'德鲁伊',
+      filter:'Druid' //默认显示德鲁伊
     };
     this._openFilter = this._openFilter.bind(this);
     this._openSearch = this._openSearch.bind(this);
@@ -110,7 +117,8 @@ class App extends Component {
         nameSt = 'Druid'
       }
     }
-    this.setState({ chooseClass: nameSt, chooseClassCN:name, openClass: false })
+    this.setState({ filter: nameSt, filterCN:name, openClass: false })
+    this.props.cardsSearch('classes', this.state.option, nameSt )
   }
 
   //搜索
@@ -119,8 +127,8 @@ class App extends Component {
   }
 
   //卡牌详情
-  _cardsClick(play, cardId) {
-    this.props.cardsDetilSearch(play,cardId)
+  _cardsClick(play, url) {
+    this.props.cardsDetilSearch(play,url)
   }
 
   //卡牌详情关闭
@@ -133,10 +141,10 @@ class App extends Component {
 
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
-        <Header chooseClassCN={this.state.chooseClassCN} _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
+        <Header filterCN={this.state.filterCN} _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
 
         <View style={styles.container}>
-            <Cards chooseClass={this.state.chooseClass} tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} _cardsClick={this._cardsClick} />
+          <Cards filter={this.state.filter} tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} _cardsClick={this._cardsClick} />
 
           { //加载器
             common.loading ?
@@ -269,7 +277,6 @@ const styles = StyleSheet.create({
     width:45,
     height: 45,
     marginTop:8,
-    backgroundColor:'rgba(0,0,0,0.7)',
   }
 });
 

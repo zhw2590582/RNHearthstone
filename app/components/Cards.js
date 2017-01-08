@@ -11,12 +11,12 @@ export default class Cards extends Component {
       option: {
         'attack': null, //攻击力
         'callback': null, //回调
-        'collectible': null, //为1时有效
+        'collectible': 1, //为1时有效
         'cost': null, //费用
         'durability': null, //品质
         'health': null //回血
       },
-      filter: this.props.chooseClass, //默认显示德鲁伊
+      filter: this.props.filter, //默认显示德鲁伊
       page: 1
     };
     this._cardsSearch = this._cardsSearch.bind(this);
@@ -59,8 +59,7 @@ export default class Cards extends Component {
   render() {
     const { common, cards, page, chooseClass } = this.props;
     const that = this;
-    cardsCache = cards;
-    const tmp = cardsCache.filter(function(a, b) {
+    const tmp = cards.filter(function(a, b) {
       return (a.img !== undefined) && (a.type !== 'Hero') && (a.type !== 'Hero Power') //过滤掉没有图像、英雄本身
     });
     allPages = Math.ceil(tmp.length/9); //总页数
@@ -68,7 +67,7 @@ export default class Cards extends Component {
       return (b < that.state.page * 9) && (b >= (that.state.page - 1) * 9) //每页选9个
     }).map(function(a, b) {
       return <TouchableOpacity
-                onPress={that.props._cardsClick.bind(a, true, a.cardId)}
+                onPress={that.props._cardsClick.bind(a, true, a.img)}
                 key={a.cardId}
                 style={{width: 100, height: 151, marginTop: -2, backgroundColor:'rgba(0,0,0,0)'}}>
                 <Image source={{uri: a.img}} style={{width: 100, height: 151}}></Image>

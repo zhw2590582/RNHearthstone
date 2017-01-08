@@ -69,7 +69,6 @@ export function fetchHearthstone(name, option, filter) {
 
   //异步请求
   const url = nameSt + keysSt;
-  console.log(url);
   return fetch(url, HSObj.fetchInfo).then(response => response.json())
 }
 
@@ -117,7 +116,6 @@ export function * cardAsync(state) {
 export default function * rootSaga() {
   yield * [
     takeLatest('CARDS_SEARCH', hearthstoneAsync),
-    takeLatest('TIPS', tipsAsync),
-    takeLatest('CARDS_DETIL_SEARCH', cardAsync),
+    takeLatest('TIPS', tipsAsync)
   ]
 }

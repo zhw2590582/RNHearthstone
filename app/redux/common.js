@@ -9,7 +9,6 @@ const initialState = {
   },
   cardDetil:{
     state: false,
-    id:'',
     url:''
   }
 }
@@ -43,16 +42,7 @@ export default function common(state = initialState, action) {
       return Object.assign({}, state, {
         cardDetil: {
           state: action.play,
-          id: action.id
-        }
-      })
-    }
-    case CARDS_DETIL_RECEIVE: {
-      return Object.assign({}, state, {
-        cardDetil: {
-          state: true,
-          url: action.url,
-          id: action.id
+          url: action.url
         }
       })
     }
@@ -60,8 +50,7 @@ export default function common(state = initialState, action) {
       return Object.assign({}, state, {
         cardDetil: {
           state: false,
-          url: '',
-          id: ''
+          url: ''
         }
       })
     }

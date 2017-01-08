@@ -26,11 +26,11 @@ export function cardsReceive(data) {
 }
 
 //卡牌详情查询
-export function cardsDetilSearch(play, id) {
+export function cardsDetilSearch(play, url) {
   return {
     type: CARDS_DETIL_SEARCH,
     play,
-    id
+    url
   };
 }
 
