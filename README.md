@@ -1,6 +1,6 @@
 # React Native 《炉石传说》查卡App
 
-<img src='https://cdn.rawgit.com/zhw2590582/RNHearthstone/master/app.gif' width='300px'>
+<img src='https://cdn.rawgit.com/zhw2590582/RNHearthstone/master/app01.gif' width='300px'>
 
 ## 主要技术栈
 
