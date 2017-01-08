@@ -69,6 +69,7 @@ export function fetchHearthstone(name, option, filter) {
 
   //异步请求
   const url = nameSt + keysSt;
+  console.log(url);
   return fetch(url, HSObj.fetchInfo).then(response => response.json())
 }
 

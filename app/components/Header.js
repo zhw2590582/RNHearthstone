@@ -11,7 +11,7 @@ export default class Header extends Component {
 
   render() {
     return (
-      <View style={{marginTop:28,height:30, flexDirection: 'row',justifyContent:'space-between'}}>
+      <View style={{marginTop:27,height:30, flexDirection: 'row',justifyContent:'space-between'}}>
         <TouchableOpacity onPress={this.props._openFilter} style={{paddingLeft:19,backgroundColor:'rgba(0,0,0,0)'}} >
           <Text style={{fontSize:12,}}>过滤器</Text>
         </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import { StyleSheet, Image, Text , Dimensions, View, TouchableOpacity, TextInput} from 'react-native'
+import { StyleSheet, Image, Text , Dimensions, View, TouchableOpacity, TextInput, StatusBar} from 'react-native'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as actionCreators from '../actions/'
@@ -43,9 +43,12 @@ class App extends Component {
         state: false,
         text:''
       },
-      text:''
+      openFilter:{
+        state: false
+      }
     };
     this._openFilter = this._openFilter.bind(this);
+    this._closeFilter = this._closeFilter.bind(this);
     this._openSearch = this._openSearch.bind(this);
     this._closeSearch = this._closeSearch.bind(this);
     this._cardsClick = this._cardsClick.bind(this);
@@ -54,6 +57,8 @@ class App extends Component {
     this._closeClass = this._closeClass.bind(this);
     this._chooseClass = this._chooseClass.bind(this);
     this._pagesClick = this._pagesClick.bind(this);
+    this._closeSubmit = this._closeSubmit.bind(this);
+    this._chooseStar = this._chooseStar.bind(this);
   }
 
   componentDidMount() {
@@ -67,7 +72,15 @@ class App extends Component {
   //过滤器
   _openFilter() {
     this._allClose()
-    console.log('openFilter');
+    this.setState({ openFilter: {state: true} })
+  }
+
+  _closeFilter(){
+    this.setState({ openFilter: {state: false} })
+  }
+
+  _chooseStar(star){
+    console.log(star);
   }
 
   //职业
@@ -142,6 +155,14 @@ class App extends Component {
     this.setState({ search: {state: false, text:''} })
   }
 
+  //搜索提交
+  _closeSubmit() {
+    this.props.cardsSearch('search', this.state.option, encodeURI(this.state.search.text))
+    let keyWord = this.state.search.text.substring(0,3) + '...'
+    this.setState({ filterCN: keyWord})
+    this._closeSearch()
+  }
+
   //卡牌详情
   _cardsClick(play, url) {
     this._allClose()
@@ -158,6 +179,7 @@ class App extends Component {
     this._cardsClose() //卡牌详情
     this._closeClass() //职业选择
     this._closeSearch() //搜索
+    this._closeFilter() //过滤
   }
 
   //翻页
@@ -177,6 +199,7 @@ class App extends Component {
     console.log(this.state.search.text);
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
+        <StatusBar backgroundColor="blue" barStyle="light-content" />
         <Header filterCN={this.state.filterCN} _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
 
         <View style={styles.container}>
@@ -245,8 +268,28 @@ class App extends Component {
                 <TextInput
                   style={{height: 35,color:'#fff',paddingLeft:40,fontSize:14}}
                   placeholder="搜索卡牌!"
+                  maxLength={20}
                   onChangeText={(text) => this.setState({search:{state:true,text}})}
+                  onSubmitEditing={this._closeSubmit}
                 />
+              </Image>
+            </View>
+            :null
+          }
+
+          { //过滤
+            this.state.openFilter.state ?
+            <View style={styles.cardWrap}>
+              <TouchableOpacity style={styles.cardWrapBg} onPress={this._closeFilter}></TouchableOpacity>
+              <Image source={require('../assets/images/startBg.png')} style={styles.startBg}>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,0)}></TouchableOpacity>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,1)}></TouchableOpacity>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,2)}></TouchableOpacity>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,3)}></TouchableOpacity>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,4)}></TouchableOpacity>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,5)}></TouchableOpacity>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,6)}></TouchableOpacity>
+                <TouchableOpacity style={styles.startBtn} onPress={this._chooseStar.bind(this,7)}></TouchableOpacity>
               </Image>
             </View>
             :null
@@ -342,6 +385,24 @@ const styles = StyleSheet.create({
     top:0,
     width:320,
     height: 37,
+  },
+  startBg:{
+    position: 'absolute',
+    top:0,
+    width:320,
+    height: 37,
+    flexWrap:'wrap',
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    paddingLeft:25,
+    paddingRight:25,
+  },
+  startBtn:{
+    width:30,
+    height: 30,
+    marginTop:3,
+    borderRadius: 20,
+    backgroundColor:'rgba(0,0,0,0.5)',
   }
 });
 
