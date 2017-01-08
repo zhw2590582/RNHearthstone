@@ -31,6 +31,8 @@ class App extends Component {
     };
     this._openFilter = this._openFilter.bind(this);
     this._openSearch = this._openSearch.bind(this);
+    this._cardsClick = this._cardsClick.bind(this);
+    this._cardsClose = this._cardsClose.bind(this);
   }
 
   componentDidMount() {
@@ -56,6 +58,16 @@ class App extends Component {
     console.log('openSearch');
   }
 
+  //卡牌详情
+  _cardsClick(play, cardId) {
+    this.props.cardsDetilSearch(play,cardId)
+  }
+
+  //卡牌详情关闭
+  _cardsClose() {
+    this.props.cardsDetilClose()
+  }
+
   render() {
     const { common, cards, cardsSearch, tips } = this.props;
 
@@ -64,9 +76,9 @@ class App extends Component {
         <Header _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
 
         <View style={styles.container}>
-            <Cards tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} />
+            <Cards tips={tips} common={common} cards={cards} cardsSearch={cardsSearch} _cardsClick={this._cardsClick} />
 
-          {
+          { //加载器
             common.loading ?
             <View style={styles.loadingWrap}>
               <Spinner size='small' color='#fff' style={styles.loading}/>
@@ -74,7 +86,16 @@ class App extends Component {
             :null
           }
 
-          {
+          { //单卡展示
+            common.cardDetil.state ?
+            <View style={styles.cardWrap}>
+              <TouchableOpacity style={styles.cardWrapBg} onPress={this._cardsClose}></TouchableOpacity>
+              <Image source={{uri: common.cardDetil.url}} style={{width: 250, height: 378, marginTop:-100}}></Image>
+            </View>
+            :null
+          }
+
+          { //提示Tips
             common.tips.state ?
             <View style={styles.tipsWrap}>
               <View style={styles.tips}>
@@ -83,6 +104,7 @@ class App extends Component {
             </View>
             :null
           }
+
         </View>
 
       </Image>
@@ -134,6 +156,23 @@ const styles = StyleSheet.create({
     paddingTop:7,
     textAlign: 'center',
     color:'#fff',
+  },
+  cardWrap:{
+    flex: 1,
+    height,
+    width,
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  cardWrapBg:{
+    position: 'absolute',
+    top:0,
+    left:0,
+    right:0,
+    height,
+    width,
+    backgroundColor:'rgba(0,0,0,0.7)',
   }
 });
 

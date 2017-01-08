@@ -1,4 +1,4 @@
-import { INIT, LOADING, TIPS } from '../actions/';
+import { INIT, LOADING, TIPS, CARDS_DETIL_SEARCH, CARDS_DETIL_RECEIVE, CARDS_DETIL_CLOSE } from '../actions/';
 
 const initialState = {
   init: false,
@@ -6,6 +6,11 @@ const initialState = {
   tips: {
     state: false,
     info: ''
+  },
+  cardDetil:{
+    state: false,
+    id:'',
+    url:''
   }
 }
 
@@ -13,7 +18,12 @@ export default function common(state = initialState, action) {
   switch(action.type) {
     case INIT: {
       return Object.assign({}, state, {
-        init: action.play
+        init: false,
+        loading: false,
+        tips: {
+          state: false,
+          info: ''
+        }
       })
     }
     case LOADING: {
@@ -26,6 +36,32 @@ export default function common(state = initialState, action) {
         tips: {
           state: action.play,
           info: action.info
+        }
+      })
+    }
+    case CARDS_DETIL_SEARCH: {
+      return Object.assign({}, state, {
+        cardDetil: {
+          state: action.play,
+          id: action.id
+        }
+      })
+    }
+    case CARDS_DETIL_RECEIVE: {
+      return Object.assign({}, state, {
+        cardDetil: {
+          state: true,
+          url: action.url,
+          id: action.id
+        }
+      })
+    }
+    case CARDS_DETIL_CLOSE: {
+      return Object.assign({}, state, {
+        cardDetil: {
+          state: false,
+          url: '',
+          id: ''
         }
       })
     }

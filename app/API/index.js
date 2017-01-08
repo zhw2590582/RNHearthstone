@@ -126,7 +126,8 @@ export const HSObj = {
     qualities: `${HSUrl}cards/qualities`,
     races: `${HSUrl}cards/races`,
     types: `${HSUrl}cards/types`,
-    info: `${HSUrl}info`
+    info: `${HSUrl}info`,
+    single: `${HSUrl}cards`
   }
 }
 

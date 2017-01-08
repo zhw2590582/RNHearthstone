@@ -21,7 +21,6 @@ export default class Cards extends Component {
     };
     this._cardsSearch = this._cardsSearch.bind(this);
     this._onRefresh = this._onRefresh.bind(this);
-    this._cardsClick = this._cardsClick.bind(this);
     this._pagesClick = this._pagesClick.bind(this);
   }
 
@@ -43,11 +42,6 @@ export default class Cards extends Component {
     setTimeout(function() {
       self.refs.PullRefresh.onRefreshEnd();
     }, 2000);
-  }
-
-  //卡牌详情
-  _cardsClick(cardId) {
-    console.log(cardId);
   }
 
   //翻页
@@ -77,7 +71,7 @@ export default class Cards extends Component {
       return (b < that.state.page * 9) && (b >= (that.state.page - 1) * 9) //每页选9个
     }).map(function(a, b) {
       return <TouchableOpacity
-                onPress={that._cardsClick.bind(a,a.cardId)}
+                onPress={that.props._cardsClick.bind(a, true, a.cardId)}
                 key={a.cardId}
                 style={{width: 100, height: 151, marginTop: -2, backgroundColor:'rgba(0,0,0,0)'}}>
                 <Image source={{uri: a.img}} style={{width: 100, height: 151}}></Image>
