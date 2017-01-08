@@ -63,7 +63,7 @@ export function fetchHearthstone(name, option, filter) {
   //拼接选项
   const keys = ['locale=zhCN']
   Object.keys(option).forEach((i) => {
-    !!option[i] && keys.push(i + '=' + option[i])
+    option[i] !== null && keys.push(i + '=' + option[i])
   })
   const keysSt = keys.join('&')
 

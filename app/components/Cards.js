@@ -35,7 +35,14 @@ export default class Cards extends Component {
   }
 
   render() {
-    const { common, cards, page, chooseClass, _pagesClick} = this.props;
+    let { common, cards, page, chooseClass, _pagesClick, seven} = this.props;
+
+    if (seven) {
+      cards = cards.filter(function(a, b) {
+        return a.cost >= 7
+      });
+    }
+
     const that = this;
     const tmp = cards.filter(function(a, b) {
       return (a.img !== undefined) && (a.type !== 'Hero') && (a.type !== 'Hero Power') //过滤掉没有图像、英雄本身

@@ -45,8 +45,10 @@ class App extends Component {
       },
       openFilter:{
         state: false
-      }
+      },
+      seven:false
     };
+    this._chooseStar = this._chooseStar.bind(this);
     this._openFilter = this._openFilter.bind(this);
     this._closeFilter = this._closeFilter.bind(this);
     this._openSearch = this._openSearch.bind(this);
@@ -58,7 +60,6 @@ class App extends Component {
     this._chooseClass = this._chooseClass.bind(this);
     this._pagesClick = this._pagesClick.bind(this);
     this._closeSubmit = this._closeSubmit.bind(this);
-    this._chooseStar = this._chooseStar.bind(this);
   }
 
   componentDidMount() {
@@ -80,7 +81,17 @@ class App extends Component {
   }
 
   _chooseStar(star){
-    console.log(star);
+    let tmp = Object.assign({}, this.state.option, {
+      'cost': star
+    })
+    this.setState({ openFilter: {state: false }})
+    if ( star === 7) { // 7+ 特殊处理
+      this.props.cardsSearch('classes', this.state.option, this.state.filter)
+      this.setState({ seven: true })
+    } else {
+      this.props.cardsSearch('classes', tmp, this.state.filter )
+      this.setState({ seven: false })
+    }
   }
 
   //职业
@@ -140,7 +151,7 @@ class App extends Component {
         nameSt = 'Druid'
       }
     }
-    this.setState({ filter: nameSt, filterCN:name, openClass: false, page:1 })
+    this.setState({ filter: nameSt, filterCN:name, openClass: false, page:1, seven: false })
     this.props.cardsSearch('classes', this.state.option, nameSt )
   }
 
@@ -195,16 +206,16 @@ class App extends Component {
   }
 
   render() {
+    console.log(this.state);
     const { common, cards, cardsSearch, tips } = this.props;
-    console.log(this.state.search.text);
     return (
       <Image source={require('../assets/images/bg.png')} style={styles.backgroundImage}>
         <StatusBar backgroundColor="blue" barStyle="light-content" />
         <Header filterCN={this.state.filterCN} _openFilter={this._openFilter}  _openClass={this._openClass}  _openSearch={this._openSearch}/>
-
         <View style={styles.container}>
           <Cards filter={this.state.filter}
                 tips={tips}
+                seven={this.state.seven}
                 page={this.state.page}
                 common={common}
                 cards={cards}
