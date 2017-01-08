@@ -9,11 +9,14 @@
 * [redux-saga](https://github.com/redux-saga/redux-saga#readme) - 异步操作
 * [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch/issues) - 网络请求
 * [redux-logger](https://github.com/evgenyrodionov/redux-logger#readme) - 调试中间件
+* [hearthstoneapi](http://hearthstoneapi.com/) - 炉石传说API来源
 
-## 开始
+## 开始运行
 
 ```sh
 $ npm install
 $ react-native link
 $ react-native run-ios
 ```
+## 注意事项
+* 只在 IPhone SE 上调试完成，其它机型兼容性尚未测试
