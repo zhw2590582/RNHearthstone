@@ -16,7 +16,7 @@ export default class Header extends Component {
           <Text style={{fontSize:12,}}>过滤器</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.props._openClass} style={{paddingRight:10,backgroundColor:'rgba(0,0,0,0)'}}>
-          <Text style={{fontSize:14,}}>{this.props.filterCN}</Text>
+          <Text style={{fontSize:14, width:90, textAlign: 'center'}}>{this.props.filterCN}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={this.props._openSearch} style={{paddingRight:25,backgroundColor:'rgba(0,0,0,0)'}}>
           <Text style={{fontSize:12,}}>搜索</Text>
