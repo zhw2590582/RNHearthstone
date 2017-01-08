@@ -20,3 +20,5 @@ $ react-native run-ios
 ```
 ## 注意事项
 * 只在 IPhone SE 上调试完成，其它机型兼容性尚未测试
+* UI素材均来自炉石传说
+* API请求有每日限制数目
